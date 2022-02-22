@@ -6,10 +6,38 @@
     </head>
 
     <body>
-        <canvas id="gl-canvas" width="512" height="512">
+        <canvas id="gl-canvas" width="1024" height="512">
             ..oops web gl not supported by your browser
         </canvas>
-            
+        
+        <script id="vertex-shader" type="x-shader/x-vertex">
+            attribute vec4 vPosition;
+            attribute vec4 vColor;
+
+            uniform mat4 rotation;
+            uniform mat4 perspective;
+
+            varying vec4 fColor;
+
+            void main() {
+                gl_Position = perspective * rotation * vPosition;
+                fColor = vColor;
+            }
+        </script>
+
+        <script id="fragment-shader" type="x-shader/x-fragment">
+            precision mediump float;
+
+            varying vec4 fColor;
+
+            void main() {
+                gl_FragColor = fColor;
+            }
+        </script>
+
+        <script type="text/javascript" src="Common/webgl-utils.js"></script>
+        <script type="text/javascript" src="Common/initShaders.js"></script>
+        <script type="text/javascript" src="Common/MV.js"></script>
         <script type="text/javascript" src="simulator.js"></script>
     </body>
 </html>
