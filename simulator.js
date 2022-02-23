@@ -38,13 +38,20 @@ window.onload = function init() {
 
     gl.enable(gl.DEPTH_TEST);
 
+    // Sleppa því að teikna bakhliðar
+    gl.enable(gl.CULL_FACE);
+    gl.cullFace(gl.BACK);
+    gl.frontFace(gl.CCW);
+
     program = initShaders(gl, 'vertex-shader', 'fragment-shader');
 
     gl.useProgram(program);
 
     let vBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, vBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, flatten(generateCube()), gl.STATIC_DRAW);
+    gl.bufferData(gl.ARRAY_BUFFER, flatten(generateWireFrame(10, vec4(1, 0, 0, 1))), gl.STATIC_DRAW);
+    //gl.bufferData(gl.ARRAY_BUFFER, flatten(generateCube()), gl.STATIC_DRAW);
+
 
     let vPosition = gl.getAttribLocation(program, 'vPosition');
     gl.vertexAttribPointer(vPosition, 4, gl.FLOAT, false, 8*4, 0);
@@ -94,17 +101,25 @@ window.onload = function init() {
 
     canvas.addEventListener('mousemove', function(e) {
         if (modelRotating) {
-            modelRotX = (modelRotX + (modelRotStartX - e.offsetX)) % 360;
+            modelRotX = (modelRotX + (e.offsetX - modelRotStartX)) % 360;
             modelRotY = (modelRotY + (e.offsetY - modelRotStartY)) % 360;
             modelRotStartX = e.offsetX;
             modelRotStartY = e.offsetY;
         }
 
         if (modelMoving) {
-            modelMovementX = (modelMovementX + (modelMoveStartX - e.offsetX) / 1000);
+            modelMovementX = (modelMovementX + (e.offsetX - modelMoveStartX) / 1000);
             modelMovementY = (modelMovementY + (modelMoveStartY - e.offsetY) / 1000);
             modelMoveStartX = e.offsetX;
             modelMoveStartY = e.offsetY;
+        }
+    });
+
+    canvas.addEventListener('mousewheel', function(e) {
+        if(e.wheelDelta > 0) {
+            modelZoom += 0.05;
+        } else {
+            modelZoom -= 0.05;
         }
     });
 
@@ -115,6 +130,47 @@ window.onload = function init() {
     render();
 }
 
+function generateWireFrame(n, color) {
+
+    const spaceBetween = 1 / (n);
+
+    let vertices = [];
+
+    let x = -0.5, y = -0.5, z = -0.5;
+
+    // Byrja á að teikna línur samsíða x-ás 
+    for (let i = 0; i <= n; i++) {
+        for (let j = 0; j <= n; j++) {
+            vertices.push(vec4(0.5, y + i*spaceBetween, z + j*spaceBetween, 1));
+            vertices.push(color);
+            vertices.push(vec4(-0.5, y + i*spaceBetween, z + j*spaceBetween, 1));
+            vertices.push(color);
+        }
+    }
+
+    // Teikna svo línur samsíða y-ás.
+    for (let i = 0; i <= n; i++) {
+        for (let j = 0; j <= n; j++) {
+            vertices.push(vec4(x + i*spaceBetween, 0.5, z + j*spaceBetween, 1));
+            vertices.push(color);
+            vertices.push(vec4(x + i*spaceBetween, -0.5, z + j*spaceBetween, 1));
+            vertices.push(color);
+        }
+    }
+
+    // Teikna að lokum línur samsíða z-ás.
+    for (let i = 0; i <= n; i++) {
+        for (let j = 0; j <= n; j++) {
+            vertices.push(vec4(x + i*spaceBetween, y + j*spaceBetween, 0.5, 1));
+            vertices.push(color);
+            vertices.push(vec4(x + i*spaceBetween, y + j*spaceBetween, -0.5, 1));
+            vertices.push(color);
+        }
+    }
+    
+    return vertices;
+}
+
 function generateCube() {
     const indices = [
         0, 1, 2, 0, 2, 3, // Framhlið
@@ -122,7 +178,7 @@ function generateCube() {
         6, 5, 4, 6, 4, 7, // Bakhliðin 
         4, 0, 7, 0, 3, 7, // Hægri hlið
         3, 6, 7, 3, 2, 6, // Neðri hlið
-        0, 1, 5, 0, 5, 4 // Uppi
+        0, 5, 1, 0, 4, 5 // Uppi
     ];
 
     const colors = [ //Litir 
@@ -180,7 +236,7 @@ function render() {
 
     gl.uniformMatrix4fv(matrixLoc, false, flatten(mv));
 
-    gl.drawArrays(gl.TRIANGLES, 0, 36*2);
+    gl.drawArrays(gl.LINES, 0, 10000);
 
     window.requestAnimationFrame(render);
 }

@@ -1,4 +1,17 @@
+* {
+    font-family: sans-serif;
+}
+
 canvas {
     display: block;
     margin: auto;
+}
+
+.description {
+    margin: auto; 
+    max-width: 1000px;
+}
+
+.description h1 {
+    text-align: center;
 }
