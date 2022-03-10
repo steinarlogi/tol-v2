@@ -1,5 +1,6 @@
 * {
     font-family: sans-serif;
+    box-sizing: border-box;
 }
 
 canvas {
@@ -14,4 +15,16 @@ canvas {
 
 .description h1 {
     text-align: center;
+}
+
+.adjustments {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.adjustment-container {
+    width: 50%;
+    border: 1px solid black;
+    padding: 16px;
+    min-height: 100px;
 }

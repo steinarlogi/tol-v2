@@ -9,6 +9,7 @@
         <canvas id="gl-canvas" width="1024" height="512">
             ..oops web gl not supported by your browser
         </canvas>
+        <span id="sheeps-eaten">Kindur étnar: 0</span>
         
         <div class="description">
             <h1>Um líkanið</h1>
@@ -19,6 +20,38 @@
                 og til þess að færa líkanið er hægt að hægri smella á líkanið og hreyfa það.
 
             </p>
+
+            <p>
+                Hér að neðan eru ýmsar stillingar sem hægt er að stilla.
+            </p>
+
+            <div class="adjustments">
+                <div class="adjustment-container">
+                    <label for="number-of-boxes">Stærð grindarinnar</label>
+                    10<input type="range" id="number-of-boxes" min="10" max="40" value="10">40
+                    <p id="number-of-boxes-value">10</p>
+                </div>
+                <div class="adjustment-container">
+                    <label for="wireframe-on">Wirefram á/af</label>
+                    <input name="wireframe-on" id="wireframe-on" type="checkbox">
+                </div>
+                <div class="adjustment-container">
+                    <label for="speed">Hraði líkans</label>
+                    1x<input type="range" id="speed" min="1" max="10" value="1">10x
+                    <p id="speed-value">1x</p>
+                </div>
+                <div class="adjustment-container">
+                    <label for="nr-of-wolfs">Fjöldi úlfa í byrjun</label>
+                    1<input type="range" id="nr-of-wolfs" min="1" max="10" value="1">10
+                    <p id="wolf-value">1</p>
+                </div>
+                <div class="adjustment-container">
+                    <label for="nr-of-sheep">Fjöldi kinda í byrjun</label>
+                    1<input type="range" id="nr-of-sheep" min="1" max="10" value="1">10
+                    <p id="sheep-value">1</p>
+                </div>
+            </div>
+            
         </div>
 
         <script id="vertex-shader" type="x-shader/x-vertex">

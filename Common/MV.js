@@ -286,10 +286,9 @@ function mult( u, v )
                 throw "mult(): trying to add matrices of different dimensions";
             }
         }
-
         for ( var i = 0; i < u.length; ++i ) {
             result.push( [] );
-
+            
             for ( var j = 0; j < v.length; ++j ) {
                 var sum = 0.0;
                 for ( var k = 0; k < u.length; ++k ) {
@@ -298,30 +297,30 @@ function mult( u, v )
                 result[i].push( sum );
             }
         }
-
+        
         result.matrix = true;
-
+        
         return result;
     }
-
-      if(u.matrix&& (u.length == v.length)) {
+    
+    if(u.matrix&& (u.length == v.length)) {
         for(var i = 0; i<v.length; i++) {
           var sum = 0.0;
           for(var j=0; j<v.length; j++) {
-            sum += u[i][j]*v[j];
-          }
-          result.push(sum);
+              sum += u[i][j]*v[j];
+            }
+            result.push(sum);
         }
-      return result;
-      }
-
-
+        return result;
+    }
+    
+    
 
     else {
         if ( u.length != v.length ) {
             throw "mult(): vectors are not the same dimension";
         }
-
+        
         for ( var i = 0; i < u.length; ++i ) {
             result.push( u[i] * v[i] );
         }
